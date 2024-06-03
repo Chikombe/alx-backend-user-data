@@ -5,7 +5,7 @@ This module provides a function to obfuscate specified fields in a log message.
 
 import re
 import logging
-from typing import List
+from typing import List, Tuple
 
 
 def filter_datum(fields: List[str],
@@ -47,3 +47,21 @@ class RedactingFormatter(logging.Formatter):
         record.msg = filter_datum(self.fields, self.REDACTION, record.msg,
                                   self.SEPARATOR)
         return super().format(record)
+
+
+get_logger() -> logging.Logger:
+    """
+    Creates and configures a logger named "user_data".
+
+    :return: Configured logger object.
+    """
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    stream_handler = logging.StreamHandler()
+    formatter = RedactingFormatter(fields=PII_FIELDS)
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+
+    return logger
