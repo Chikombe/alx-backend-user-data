@@ -7,6 +7,9 @@ import re
 import logging
 from typing import List, Tuple
 
+# Define PII_FIELDS with fields considered as PII
+PII_FIELDS: Tuple[str, ...] = ("name", "email", "phone", "ssn", "credit_card")
+
 
 def filter_datum(fields: List[str],
                  redaction: str, message: str, separator: str) -> str:
